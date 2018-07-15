@@ -29,15 +29,19 @@ verbose = args.verbose
 limit = int(args.count)
 ln = 1
 lines = sum(1 for line in open(wordlist))
+
+if not (verbose):
+    sys.stdout.write("\r0%")
+    sys.stdout.flush()
+#'\r\n', '\n'
 for user in open(wordlist):
     ssh = paramiko.SSHClient()
     starttime = time.clock()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-    perc = (float(ln)/float(lines))*100
-    sys.stdout.write("\r%d%%" % perc)
-    sys.stdout.flush()
+    if "\r" in user: user = user.replace('\r\n', '\n')
 
+    perc = (float(ln)/float(lines))*100
 
     try:
         ssh.connect(ip, username=user,
@@ -50,7 +54,11 @@ for user in open(wordlist):
     ln += 1
 
     if verbose:
-        print("Eumerating: %s %s" % (user[0:-1], total))
+        print(" Username: %s Time: %s Done: %d%%" % (user[0:-1], total, perc))
+    else:
+        sys.stdout.write("\r%d%%" % perc)
+        sys.stdout.flush()
+
 
 ressorted = sorted(res.items(), key=operator.itemgetter(1))
 

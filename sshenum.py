@@ -40,7 +40,7 @@ for user in open(wordlist):
 
 
     try:
-        ssh.connect(ip, username=user[0:-1],
+        ssh.connect(ip, username=user,
                     password=p)
     except:
         endtime = time.clock()

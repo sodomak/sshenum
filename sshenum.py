@@ -6,7 +6,7 @@ import sys
 from argparse import ArgumentParser
 
 parser = ArgumentParser()
-parser.add_argument("-w", "--wordlist", metavar="path", default="word.txt",
+parser.add_argument("-w", "--wordlist", metavar="path", default="wordlist.txt",
                     help="Wordlist with usernames")
 parser.add_argument('rhost',
                     help="Target address")
@@ -42,6 +42,3 @@ ressorted = sorted(res.items(), key=operator.itemgetter(1))
 print("\nSorted:\n")
 for x, y in ressorted:
     print("%s %s" % (x[0:-1], y))
-
-#    if user=="xxx":
-#        break

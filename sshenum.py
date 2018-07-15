@@ -25,7 +25,7 @@ res = {}
 wordlist = args.wordlist
 ip = args.rhost
 verbose = args.verbose
-limit = args.count
+limit = int(args.count)
 
 for user in open(wordlist):
     ssh = paramiko.SSHClient()
@@ -46,8 +46,13 @@ ressorted = sorted(res.items(), key=operator.itemgetter(1))
 
 c = 0
 print("\nSorted:\n")
+# print(c)
+# print(limit)
 for x, y in ressorted:
-    if c > limit:
-       print("%s %s" % (x[0:-1], y))
-       c = c + 1
-    else: break
+
+    if (c < limit):
+        #       print("%s  %s" % (c, limit))
+        print("%s %s" % (x[0:-1], y))
+        c += 1
+    else:
+        break

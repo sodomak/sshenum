@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import operator
 import time
 import sys

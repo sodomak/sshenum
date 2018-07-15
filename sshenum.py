@@ -1,13 +1,16 @@
-import paramiko
-import time
-import collections
 import operator
-import sys
+import time
 from argparse import ArgumentParser
+
+import paramiko
 
 parser = ArgumentParser()
 parser.add_argument("-w", "--wordlist", metavar="path", default="wordlist.txt",
                     help="Wordlist with usernames")
+
+parser.add_argument("-c", "--count", metavar="number", default=10,
+                    help="Limit output to x items")
+
 parser.add_argument('rhost',
                     help="Target address")
 parser.add_argument("-v", "--verbose", action="store_true",
@@ -22,6 +25,7 @@ res = {}
 wordlist = args.wordlist
 ip = args.rhost
 verbose = args.verbose
+limit = args.count
 
 for user in open(wordlist):
     ssh = paramiko.SSHClient()
@@ -39,6 +43,11 @@ for user in open(wordlist):
         print("%s %s" % (user[0:-1], total))
 
 ressorted = sorted(res.items(), key=operator.itemgetter(1))
+
+c = 0
 print("\nSorted:\n")
 for x, y in ressorted:
-    print("%s %s" % (x[0:-1], y))
+    if c > limit:
+       print("%s %s" % (x[0:-1], y))
+       c = c + 1
+    else: break

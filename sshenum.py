@@ -38,7 +38,7 @@ if not (verbose):
 #'\r\n', '\n'
 for user in open(wordlist):
     ssh = paramiko.SSHClient()
-    starttime = time.clock()
+    starttime = time.process_time()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     if "\r" in user: user = user.replace('\r\n', '\n')
@@ -49,7 +49,7 @@ for user in open(wordlist):
         ssh.connect(ip, username=user,
                     password=p)
     except:
-        endtime = time.clock()
+        endtime = time.process_time()
     total = endtime - starttime
 
     res[user] = total
